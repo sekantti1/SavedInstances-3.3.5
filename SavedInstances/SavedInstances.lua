@@ -111,6 +111,7 @@ vars.defaultDB = {
 		ReverseInstances = false,
 		ShowCategories = false,
 		CategorySpaces = false,
+		RowHighlight = 0.1,
 		NewFirst = true,
 		RaidsFirst = true,
 		CategorySort = "EXPANSION", -- "EXPANSION", "TYPE"
@@ -730,6 +731,21 @@ function core:ShowTooltip(anchorframe)
 			end
 		end
 	end
+	
+	local hi = true
+	for i=2,tooltip:GetLineCount() do -- row highlighting
+		tooltip:SetLineScript(i, "OnEnter", DoNothing)
+		tooltip:SetLineScript(i, "OnLeave", DoNothing)
+
+		if hi then
+		  tooltip:SetLineColor(i, 1,1,1, db.Tooltip.RowHighlight)
+		  hi = false
+		else
+		  tooltip:SetLineColor(i, 0,0,0, 0)
+		  hi = true
+		end
+	end
+	
 	-- finishing up, with hints
 	if TableLen(instancerow) == 0 then
 		local noneLine = tooltip:AddLine()

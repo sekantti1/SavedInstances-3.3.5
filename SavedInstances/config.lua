@@ -218,8 +218,16 @@ core.Options = {
 					desc = L["List raid categories before dungeon categories"],
 					order = 17,
 				},
-				
-				
+				RowHighlight = {
+				type = "range",
+				name = L["Row Highlight"],
+				desc = L["Opacity of the tooltip row highlighting"],
+				order = 4.83,
+				min = 0,
+				max = 0.5,
+				bigStep = 0.1,
+				isPercent = true,
+				},
 				InstancesHeader = {
 					order = 20, 
 					type = "header",

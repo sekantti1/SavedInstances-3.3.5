@@ -2,7 +2,7 @@
 ## Title: SavedInstances
 ## Notes: Keeps track of the raid IDs saved against your characters.
 ## Author: jokeyrhyme
-## Version: v3.0.1 (r119)
+## Version: v3.0.2
 ## X-AceForum: 14896
 ## X-License: BSD
 ## X-Category: Raid
