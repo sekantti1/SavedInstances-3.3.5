@@ -1,0 +1,28 @@
+------------------------------------------------------------------------
+r157 | oscarucb | 2012-07-08 16:29:11 +0000 (Sun, 08 Jul 2012) | 1 line
+Changed paths:
+   A /tags/4.7.0 (from /trunk:156)
+
+Tagging as 4.7.0
+------------------------------------------------------------------------
+r156 | oscarucb | 2012-07-08 16:23:33 +0000 (Sun, 08 Jul 2012) | 2 lines
+Changed paths:
+   M /trunk/SavedInstances.lua
+
+Add tracking for Darkmoon Faire monthly quests
+
+------------------------------------------------------------------------
+r154 | oscarucb | 2012-06-13 14:15:36 +0000 (Wed, 13 Jun 2012) | 2 lines
+Changed paths:
+   M /trunk/SavedInstances.lua
+
+possible fix to a rare weekly reset glitch
+
+------------------------------------------------------------------------
+r152 | oscarucb | 2012-06-07 18:36:27 +0000 (Thu, 07 Jun 2012) | 2 lines
+Changed paths:
+   M /trunk/SavedInstances.lua
+
+save position of detached tooltip
+
+------------------------------------------------------------------------
