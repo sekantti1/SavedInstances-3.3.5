@@ -873,7 +873,7 @@ function addon:UpdateToonData()
 					if ci.amount == 0 or ci.amount == nil then -- first time run
 						ci.earnedThisWeek = 0
 					elseif ci.amount and ci.amount < amount then
-						ci.earnedThisWeek = amount - ci.amount
+						ci.earnedThisWeek = (amount - ci.amount) + ci.earnedThisWeek
 					end
 					ci.amount = amount
 				else
@@ -1165,9 +1165,9 @@ local function ShowCurrencyTooltip(cell, arg, ...)
 	indicatortip:AddHeader(ClassColorise(vars.db.Toons[toon].Class, strsplit(' ', toon)),
 		"(" .. (ci.amount or "0") .. tex .. ")")
 
-	scantt:SetOwner(UIParent, "ANCHOR_NONE")
-	scantt:SetCurrencyByID(idx)
-	local name = scantt:GetName()
+	--scantt:SetOwner(UIParent, "ANCHOR_NONE")
+	--scantt:SetCurrencyByID(idx)
+	--local name = scantt:GetName()
 	-- for i = 1, scantt:NumLines() do
 	-- 	local left = _G[name .. "TextLeft" .. i]
 	-- 	if left:GetText():find(weeklycap_scan) or
@@ -1984,6 +1984,7 @@ function core:ShowTooltip(anchorframe)
 		end
 	end
 
+	-- quests
     do
 		local weeklycnt = localarr("weeklycnt")
 		local showd, showw 
@@ -2028,6 +2029,7 @@ function core:ShowTooltip(anchorframe)
 		end
         end
 
+	-- currencies
 	local firstcurrency = true
 	for _, idx in ipairs(currency) do
 		local setting = vars.db.Tooltip["Currency" .. idx]
@@ -2122,11 +2124,6 @@ function core:ShowTooltip(anchorframe)
 					tooltip:GetColumnCount())
 			end
 		end
-	end
-
-	for i = 2, tooltip:GetLineCount() do -- row highlighting
-		tooltip:SetLineScript(i, "OnEnter", function() end)
-		tooltip:SetLineScript(i, "OnLeave", function() end)
 	end
 
 	local hi = true
