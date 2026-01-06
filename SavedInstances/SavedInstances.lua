@@ -826,7 +826,6 @@ function addon:UpdateToonData()
 	if nextreset and nextreset > time() then
 		for toon, ti in pairs(vars.db.Toons) do
 			if not ti.DailyResetTime or (ti.DailyResetTime < time()) then
-				print("t4twger34g3444g")
 				ti.DailyCount = 0
 				for id, qi in pairs(ti.Quests) do
 					if qi.isDaily then
