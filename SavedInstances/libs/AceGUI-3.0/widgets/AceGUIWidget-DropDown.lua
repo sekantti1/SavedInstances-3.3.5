@@ -1,19 +1,7 @@
---[[ $Id: AceGUIWidget-DropDown.lua 1029 2011-06-10 23:10:58Z nevcairiel $ ]]--
-local AceGUI = LibStub("AceGUI-3.0")
-
--- Lua APIs
+--[[ $Id: AceGUIWidget-DropDown.lua 815 2009-07-08 20:58:17Z nevcairiel $ ]]--
 local min, max, floor = math.min, math.max, math.floor
-local select, pairs, ipairs, type = select, pairs, ipairs, type
-local tsort = table.sort
 
--- WoW APIs
-local PlaySound = PlaySound
-local UIParent, CreateFrame = UIParent, CreateFrame
-local _G = _G
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: CLOSE
+local AceGUI = LibStub("AceGUI-3.0")
 
 local function fixlevels(parent,...)
 	local i = 1
@@ -39,12 +27,12 @@ end
 
 do
 	local widgetType = "Dropdown-Pullout"
-	local widgetVersion = 3
+	local widgetVersion = 2
 	
 	--[[ Static data ]]--
 	
 	local backdrop = {
-		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
+		bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
 		edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
 		edgeSize = 32,
 		tileSize = 32,
@@ -356,7 +344,7 @@ end
 
 do
 	local widgetType = "Dropdown"
-	local widgetVersion = 25
+	local widgetVersion = 20
 	
 	--[[ Static data ]]--
 	
@@ -379,7 +367,6 @@ do
 	
 	local function Dropdown_TogglePullout(this)
 		local self = this.obj
-		PlaySound("igMainMenuOptionCheckBoxOn") -- missleading name, but the Blizzard code uses this sound
 		if self.open then
 			self.open = nil
 			self.pullout:Close()
@@ -460,7 +447,6 @@ do
 		
 		self:SetHeight(44)
 		self:SetWidth(200)
-		self:SetLabel()
 	end
 	
 	-- exported, AceGUI callback
@@ -472,6 +458,7 @@ do
 		self.pullout = nil
 		
 		self:SetText("")
+		self:SetLabel("")
 		self:SetDisabled(false)
 		self:SetMultiselect(false)
 		
@@ -516,14 +503,12 @@ do
 			self.label:SetText(text)
 			self.label:Show()
 			self.dropdown:SetPoint("TOPLEFT",self.frame,"TOPLEFT",-15,-18)
-			self:SetHeight(44)
-			self.alignoffset = 30
+			self.frame:SetHeight(44)
 		else
 			self.label:SetText("")
 			self.label:Hide()
 			self.dropdown:SetPoint("TOPLEFT",self.frame,"TOPLEFT",-15,0)
-			self:SetHeight(26)
-			self.alignoffset = 12
+			self.frame:SetHeight(26)
 		end
 	end
 	
@@ -533,11 +518,6 @@ do
 			self:SetText(self.list[value] or "")
 		end
 		self.value = value
-	end
-	
-	-- exported
-	local function GetValue(self)
-		return self.value
 	end
 	
 	-- exported
@@ -562,12 +542,8 @@ do
 		end
 	end
 	
-	local function AddListItem(self, value, text, itemType)
-		if not itemType then itemType = "Dropdown-Item-Toggle" end
-		local exists = AceGUI:GetWidgetVersion(itemType)
-		if not exists then error(("The given item type, %q, does not exist within AceGUI-3.0"):format(tostring(itemType)), 2) end
-
-		local item = AceGUI:Create(itemType)
+	local function AddListItem(self, value, text)
+		local item = AceGUI:Create("Dropdown-Item-Toggle")
 		item:SetText(text)
 		item.userdata.obj = self
 		item.userdata.value = value
@@ -586,26 +562,20 @@ do
 	
 	-- exported
 	local sortlist = {}
-	local function SetList(self, list, order, itemType)
+	local function SetList(self, list)
 		self.list = list
 		self.pullout:Clear()
 		self.hasClose = nil
 		if not list then return end
 		
-		if type(order) ~= "table" then
-			for v in pairs(list) do
-				sortlist[#sortlist + 1] = v
-			end
-			tsort(sortlist)
-			
-			for i, key in ipairs(sortlist) do
-				AddListItem(self, key, list[key], itemType)
-				sortlist[i] = nil
-			end
-		else
-			for i, key in ipairs(order) do
-				AddListItem(self, key, list[key], itemType)
-			end
+		for v in pairs(list) do
+			sortlist[#sortlist + 1] = v
+		end
+		table.sort(sortlist)
+		
+		for i, value in pairs(sortlist) do
+			AddListItem(self, value, list[value])
+			sortlist[i] = nil
 		end
 		if self.multiselect then
 			ShowMultiText(self)
@@ -614,10 +584,10 @@ do
 	end
 	
 	-- exported
-	local function AddItem(self, value, text, itemType)
+	local function AddItem(self, value, text)
 		if self.list then
 			self.list[value] = text
-			AddListItem(self, value, text, itemType)
+			AddListItem(self, value, text)
 		end
 	end
 	
@@ -657,7 +627,6 @@ do
 
 		self.SetText     = SetText
 		self.SetValue    = SetValue
-		self.GetValue    = GetValue
 		self.SetList     = SetList
 		self.SetLabel    = SetLabel
 		self.SetDisabled = SetDisabled
@@ -667,8 +636,10 @@ do
 		self.SetItemValue = SetItemValue
 		self.SetItemDisabled = SetItemDisabled
 		
-		self.alignoffset = 30
+		self.alignoffset = 31
 		
+		frame:SetHeight(44)
+		frame:SetWidth(200)
 		frame:SetScript("OnHide",Dropdown_OnHide)
 
 		dropdown:ClearAllPoints()

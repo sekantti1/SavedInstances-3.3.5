@@ -15,7 +15,7 @@
 -- make into AceTimer.
 -- @class file
 -- @name AceTimer-3.0
--- @release $Id: AceTimer-3.0.lua 1037 2011-09-02 16:24:08Z mikk $
+-- @release $Id: AceTimer-3.0.lua 769 2009-04-04 11:05:08Z nevcairiel $
 
 --[[
 	Basic assumptions:
@@ -36,7 +36,7 @@
 	- ALLOWS unscheduling ANY timer (including the current running one) at any time, including during OnUpdate processing
 ]]
 
-local MAJOR, MINOR = "AceTimer-3.0", 6
+local MAJOR, MINOR = "AceTimer-3.0", 5
 local AceTimer, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceTimer then return end -- No upgrade needed
@@ -46,19 +46,13 @@ AceTimer.hash = AceTimer.hash or {}         -- Array of [0..BUCKET-1] = linked l
 AceTimer.selfs = AceTimer.selfs or {}       -- Array of [self]={[handle]=timerobj, [handle2]=timerobj2, ...}
 AceTimer.frame = AceTimer.frame or CreateFrame("Frame", "AceTimer30Frame")
 
--- Lua APIs
-local assert, error, loadstring = assert, error, loadstring
-local setmetatable, rawset, rawget = setmetatable, rawset, rawget
-local select, pairs, type, next, tostring = select, pairs, type, next, tostring
-local floor, max, min = math.floor, math.max, math.min
-local tconcat = table.concat
-
--- WoW APIs
-local GetTime = GetTime
-
--- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
--- List them here for Mikk's FindGlobals script
--- GLOBALS: DEFAULT_CHAT_FRAME, geterrorhandler
+local type = type
+local next = next
+local pairs = pairs
+local select = select
+local tostring = tostring
+local floor = floor
+local max = max
 
 -- Simple ONE-SHOT timer cache. Much more efficient than a full compost for our purposes.
 local timerCache = nil
@@ -109,7 +103,7 @@ local function CreateDispatcher(argCount)
 	
 	local ARGS = {}
 	for i = 1, argCount do ARGS[i] = "arg"..i end
-	code = code:gsub("ARGS", tconcat(ARGS, ", "))
+	code = code:gsub("ARGS", table.concat(ARGS, ", "))
 	return assert(loadstring(code, "safecall Dispatcher["..argCount.."]"))(xpcall, errorhandler)
 end
 
@@ -402,7 +396,7 @@ local function OnEvent(this, event)
 	
 	-- Time to clean it out?
 	local list = selfs[self]
-	if (list.__ops or 0) < 250 then	-- 250 slosh indices = ~10KB wasted (worst case!). For one 'self'.
+	if (list.__ops or 0) < 250 then	-- 250 slosh indices = ~10KB wasted (max!). For one 'self'.
 		return
 	end
 	
@@ -411,9 +405,7 @@ local function OnEvent(this, event)
 	local n=0
 	for k,v in pairs(list) do
 		newlist[k] = v
-		if type(v)=="table" and v.callback then -- if the timer is actually live: count it
-			n=n+1
-		end
+		n=n+1
 	end
 	newlist.__ops = 0	-- Reset operation count
 	
@@ -470,6 +462,6 @@ AceTimer.frame:SetScript("OnUpdate", OnUpdate)
 AceTimer.frame:SetScript("OnEvent", OnEvent)
 AceTimer.frame:RegisterEvent("PLAYER_REGEN_ENABLED")
 
--- In theory, we could hide&show the frame based on there being timers or not.
+-- In theory, we should hide&show the frame based on there being timers or not.
 -- However, this job is fairly expensive, and the chance that there will 
--- actually be zero timers running is diminuitive to say the least.
+-- actually be zero timers running is diminuitive to say the lest.

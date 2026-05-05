@@ -1,0 +1,31 @@
+------------------------------------------------------------------------
+r135 | torhal | 2010-05-11 19:49:50 +0000 (Tue, 11 May 2010) | 1 line
+Changed paths:
+   A /tags/r135-release (from /trunk:134)
+
+Tagging as r135-release
+------------------------------------------------------------------------
+r134 | adirelle | 2010-04-12 12:23:26 +0000 (Mon, 12 Apr 2010) | 1 line
+Changed paths:
+   M /trunk/LibQTip-1.0.lua
+
+Added a OnRelease callback.
+------------------------------------------------------------------------
+r133 | adirelle | 2010-04-12 10:03:25 +0000 (Mon, 12 Apr 2010) | 1 line
+Changed paths:
+   M /trunk/LibQTip-1.0.lua
+
+Track and remove all tooltip script handlers on release. tooltip:HookScript is not allowed anymore because handlers added by that method cannot be removed.
+------------------------------------------------------------------------
+r132 | adirelle | 2010-04-12 09:49:17 +0000 (Mon, 12 Apr 2010) | 1 line
+Changed paths:
+   M /trunk/LibQTip-1.0.lua
+
+Added tooltip methods :Release() and :IsAcquiredBy(key).
+------------------------------------------------------------------------
+r131 | adirelle | 2010-04-12 09:45:02 +0000 (Mon, 12 Apr 2010) | 1 line
+Changed paths:
+   M /trunk/LibQTip-1.0.lua
+
+Secured ReleaseTooltip against OnHide scripts that call lib:Release().
+------------------------------------------------------------------------
