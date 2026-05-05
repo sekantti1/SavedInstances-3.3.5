@@ -734,7 +734,7 @@ end
 
 local function EnlargeColumn(tooltip, column, width)
 	if width > column.width then
-		SetTooltipSize(tooltip, tooltip.width + width - column.width, tooltip.height)
+		SetTooltipSize(tooltip, tooltip.width + width - column.width + 1.5, tooltip.height)
 
 		column.width = width
 		column:SetWidth(width)
