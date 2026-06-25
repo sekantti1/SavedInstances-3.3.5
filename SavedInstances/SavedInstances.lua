@@ -670,7 +670,14 @@ function addon:UpdateInstance(id)
 	minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel,
 	expansionLevel, groupID, textureFilename,
 	difficulty, maxPlayers, description, isHoliday = nil
-	if LFGGetDungeonInfoByID and LFGDungeonInfo then -- 4.2 (requires LFGDungeonInfo)
+	if id == 286 or id == 285 or id == 287 or id == 288 then
+		name, typeID,
+		minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel,
+		expansionLevel, groupID, textureFilename,
+		difficulty, maxPlayers, description, isHoliday
+		= GetLFGDungeonInfo(id)
+		if not name then return end
+	elseif LFGGetDungeonInfoByID and LFGDungeonInfo then -- 4.2 (requires LFGDungeonInfo)
 		local instanceInfo = LFGGetDungeonInfoByID(id)
 		if not instanceInfo then return end
 		name, typeID, -- subtypeID,
@@ -679,7 +686,7 @@ function addon:UpdateInstance(id)
 		difficulty, maxPlayers, description, isHoliday
 		= unpack(instanceInfo)
 	elseif GetLFGDungeonInfo and currentbuild > 14545 then -- 4.3
-		name, typeID, subtypeID,
+		name, typeID,
 		minLevel, maxLevel, recLevel, minRecLevel, maxRecLevel,
 		expansionLevel, groupID, textureFilename,
 		difficulty, maxPlayers, description, isHoliday
@@ -772,7 +779,15 @@ function addon:UpdateToonData()
 		if i.Holiday and addon.activeHolidays[instance] then
 			local id = i.LFDID
 			GetLFGDungeonInfo(id) -- forces update
-			local donetoday = GetLFGDungeonRewards(id)
+			--local donetoday = GetLFGDungeonRewards(id)
+			local _, _, _, _, _, numRewards = GetLFGDungeonRewards(id)
+			local donetoday
+			if numRewards == 0 then
+				donetoday = true
+			else
+				donetoday = false
+			end
+
 			local expires = addon:GetNextDailyResetTime()
 			if donetoday and expires then
 				i[thisToon] = i[thisToon] or {}
